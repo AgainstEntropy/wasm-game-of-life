@@ -1,0 +1,3 @@
+[submodule "www"]
+	path = www
+	url = https://github.com/AgainstEntropy/create-wasm-app.git
