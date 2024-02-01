@@ -2,6 +2,9 @@ mod utils;
 
 use wasm_bindgen::prelude::*;
 
+extern crate js_sys;
+
+
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
@@ -86,19 +89,38 @@ impl Universe {
         self.cells = next;
     }
 
-    pub fn new() -> Universe {
-        let width = 64;
-        let height = 64;
+    pub fn new(mode: InitMode, prob_alive: Option<f64>) -> Universe {
 
-        let cells = (0..width * height)
-            .map(|i| {
-                if i % 2 == 0 || i % 7 == 0 {
-                    Cell::Alive
-                } else {
-                    Cell::Dead
-                }
-            })
-            .collect();
+        let width: u32 = 64;
+        let height: u32 = 64;
+
+        let cells = match mode {
+            InitMode::Empty => {
+                vec![Cell::Dead; (width * height) as usize]
+            }
+            InitMode::TwoSeven => {
+                (0..width * height)
+                .map(|i| {
+                    if i % 2 == 0 || i % 7 == 0 {
+                        Cell::Alive
+                    } else {
+                        Cell::Dead
+                    }
+                })
+                .collect()
+            }
+            InitMode::Random => {
+                (0..width * height)
+                    .map(|_i| {
+                        if js_sys::Math::random() < prob_alive.unwrap_or(0.5) {
+                            Cell::Alive
+                        } else {
+                            Cell::Dead
+                        }
+                    })
+                    .collect()
+            }
+        };
 
         Universe {
             width,
@@ -122,9 +144,15 @@ impl Universe {
     pub fn cells(&self) -> *const Cell {
         self.cells.as_ptr()
     }
+
+#[wasm_bindgen]
+pub enum InitMode {
+    Empty,
+    Random,
+    TwoSeven,
 }
 
-use std::fmt;
+use std::{fmt, vec};
 
 impl fmt::Display for Universe {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
