@@ -15,26 +15,26 @@ macro_rules! log {
 
 
 // time profiling
-use web_sys::console;
+// use web_sys::console;
 
-pub struct Timer<'a> {
-    name: &'a str,
-}
+// pub struct Timer<'a> {
+//     name: &'a str,
+// }
 
-impl<'a> Timer<'a> {
-    pub fn new(name: &'a str) -> Timer<'a> {
-        console::time_with_label(name);
-        Timer { name }
-    }
-}
+// impl<'a> Timer<'a> {
+//     pub fn new(name: &'a str) -> Timer<'a> {
+//         console::time_with_label(name);
+//         Timer { name }
+//     }
+// }
 
-impl<'a> Drop for Timer<'a> {
-    fn drop(&mut self) {
-        console::time_end_with_label(self.name);
-    }
-}
+// impl<'a> Drop for Timer<'a> {
+//     fn drop(&mut self) {
+//         console::time_end_with_label(self.name);
+//     }
+// }
 
-#[wasm_bindgen]
+// #[wasm_bindgen]
 #[repr(u8)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Cell {
@@ -51,7 +51,7 @@ impl Cell {
     }
 }
 
-#[wasm_bindgen]
+// #[wasm_bindgen]
 pub struct Universe {
     width: u32,
     height: u32,
@@ -133,7 +133,7 @@ impl Universe {
 }
 
 // Public methods, exported to JavaScript.
-#[wasm_bindgen]
+// #[wasm_bindgen]
 impl Universe {
     pub fn tick(&mut self) {
         // let _timer = Timer::new("Universe::tick");
@@ -300,7 +300,7 @@ impl Universe {
     }
 }
 
-#[wasm_bindgen]
+// #[wasm_bindgen]
 pub enum InitMode {
     Empty,
     TwoSeven,
